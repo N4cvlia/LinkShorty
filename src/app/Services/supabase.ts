@@ -23,9 +23,13 @@ export class SupabaseService {
   async ShortenUrl(url: string): Promise<{shortCode: string;
     shortUrl: string; originalUrl: string
   }> {
+    const token = await (window as any).grecaptcha.execute('6Ld83O8rAAAAAD3hI-7akxvtb4bgWQJVltdwvmzK', { action: 'shorten'});
     const { data, error} = await
     this.supabase.functions.invoke('shorten-url', {
-      body: { url}
+      body: { 
+        url: url,
+        recaptchaToken: token
+      }
     });
 
     if(error) throw error;

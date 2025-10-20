@@ -18,7 +18,20 @@ export class Home {
   constructor(private supabaseService: SupabaseService) {}
 
   ngOnInit() {
-    
+    const lastShortened = this.getLastShortened();
+    if(lastShortened) {
+      this.result = lastShortened;
+    }
+  }
+
+  saveLastShortened(shortCode: string, shortUrl: string, originalUrl: string) {
+    const data = { shortCode, shortUrl, originalUrl };
+    localStorage.setItem('lastShortened', JSON.stringify(data));
+  }
+
+  getLastShortened() {
+    const data = localStorage.getItem('lastShortened');
+    return data ? JSON.parse(data) : null;
   }
 
   async shortenUrl() {
@@ -32,8 +45,8 @@ export class Home {
     this.result = null;
 
     try {
-      this.result = await
-      this.supabaseService.ShortenUrl(this.url.trim());
+      this.result = await this.supabaseService.ShortenUrl(this.url.trim());
+      this.saveLastShortened(this.result.shortCode, this.result.shortUrl, this.result.originalUrl);
     } catch(err: any) {
       this.error = err.message || 'Failed to shorten URL';
       console.error('Error:', err);

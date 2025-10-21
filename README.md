@@ -49,8 +49,9 @@ This project serves as both a **functional web application** and a **portfolio s
 
 ### Core Functionality
 * 🔗 **URL Shortening** – Transform long URLs into compact, shareable links
+* 📲 **QR Generation** - Create scannable QR codes from any URL
 * ⚡ **Instant Redirects** – Lightning-fast URL resolution and redirection
-* 🎯 **Custom Aliases** – Create memorable, branded short links
+* 🎯 **Custom Aliases** – Create memorable, branded short linkslinks
 * 📊 **Click Tracking** – Monitor link usage and performance
 * 📱 **Responsive Design** – Seamless experience across all devices
 * 🤖 **reCAPTCHA Protection** – Google reCAPTCHA v3 prevents spam and abuse

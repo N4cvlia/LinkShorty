@@ -17,15 +17,19 @@
       </div>
   
       <div class="url-shortener-card">
+        <span class="url-shortener-header">Enter your long URL</span>
         <div class="input-group">
-          <input 
+          <div class="url-input-container">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-link2 absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground"><path d="M9 17H7A5 5 0 0 1 7 7h2"></path><path d="M15 7h2a5 5 0 1 1 0 10h-2"></path><line x1="8" x2="16" y1="12" y2="12"></line></svg>
+            <input 
             type="url" 
             class="url-input"
             [(ngModel)]="url"
-            (keypress)="shortenUrl()"
-            placeholder="Enter your long URL here..."
+            (keyup.enter)="shortenUrl()"
+            placeholder="https://example.com/very-long-url"
             [disabled]="loading"
-          />
+            />
+          </div>
           <button 
             class="shorten-button"
             (click)="shortenUrl()"
@@ -46,8 +50,32 @@
                 {{ copied ? 'Copied!' : 'Copy' }}
               </button>
             </div>
-            <div class="original-url">
+            <!-- <div class="original-url">
               Original: {{ result.originalUrl }}
+            </div> -->
+
+            <div class="qr-section">
+              <div class="qr-container">
+                <p class="qr-label">QR Code</p>
+                <div #qrcode class="qr-code-wrapper">
+                  <qrcode 
+                    [qrdata]="result.shortUrl" 
+                    [width]="128"
+                    [errorCorrectionLevel]="'M'"
+                    [elementType]="'canvas'"
+                  ></qrcode>
+                </div>
+              </div>
+              
+              <div class="qr-actions">
+                <button (click)="downloadQRCode()" class="btn-download">
+                  Download QR
+                </button>
+                <div class="original-url">
+                  <p class="label">Original URL:</p>
+                  <p>{{ result.originalUrl }}</p>
+                </div>
+              </div>
             </div>
           </div>
         }

@@ -108,11 +108,25 @@
     margin: 2rem auto;
     background: hsl(var(--card));
     border-radius: 1rem;
-    padding: 2rem;
+    padding: 2.2rem 2rem;
     box-shadow: var(--shadow-glow);
     transition: transform 0.2s ease;
   }
-  
+  .url-input-container svg{
+    position: absolute;
+    top: 25%;
+    left: 12px;
+    width: 20px;
+    font-weight: 500;
+    border-radius: 4px 0 0 4px;
+    opacity: 0.6;
+  }
+  .url-input-container {
+    position: relative;
+    flex: 1;
+    border: 1px solid hsl(var(--border));
+    border-radius: 0.5rem;
+  }
   .url-shortener-card:hover {
     transform: translateY(-2px);
   }
@@ -125,17 +139,18 @@
   
   .url-input {
     flex: 1;
-    padding: 0.75rem 1rem;
-    border: 1px solid hsl(var(--border));
+    padding: 1rem 1rem 1rem 2.5rem;
     border-radius: 0.5rem;
-    font-size: 1rem;
+    font-size: 0.9rem;
     background: hsl(var(--background));
     color: hsl(var(--foreground));
+    outline: none;
+    border: 0;
+    width: 100%;
   }
   
   .url-input:focus {
     outline: none;
-    border-color: hsl(var(--primary));
     box-shadow: 0 0 0 3px hsl(var(--primary) / 0.15);
   }
   
@@ -172,7 +187,7 @@
     font-size: 0.875rem;
     font-weight: 600;
     color: hsl(var(--muted-foreground));
-    margin-bottom: 0.5rem;
+    margin-bottom: 1.7rem;
   }
   
   .result-url {
@@ -188,6 +203,7 @@
     font-size: 1.25rem;
     font-weight: 600;
     word-break: break-all;
+    
   }
   
   .copy-button {
@@ -209,9 +225,19 @@
     font-size: 0.875rem;
     color: hsl(var(--muted-foreground));
     margin-top: 0.5rem;
+
+    text-overflow: ellipsis;
+    overflow: hidden;
     word-break: break-all;
   }
-  
+  .url-shortener-header {
+    display: flex;
+    font-size: 0.9rem;
+    font-weight: 500;
+    margin-bottom: 0.8rem;
+    color: hsl(var(--foreground));
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  }
   .features-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -230,9 +256,9 @@
     text-align: center;
     padding: 1.5rem;
     border-radius: 0.75rem;
-    background: hsl(var(--card) / 0.3);
+    background: hsl(var(--card) / 0.6);
     backdrop-filter: blur(8px);
-    border: 1px solid hsl(var(--border) / 0.3);
+    border: 1px solid hsl(var(--border) / 0.5);
     transition: all 0.3s ease;
   }
   
@@ -275,7 +301,89 @@
     font-size: 0.875rem;
     color: hsl(var(--muted-foreground));
   }
+  .qr-section {
+    padding-top: 1rem;
+    margin-top: 2rem;
+    border-top: 1px solid rgba(59, 130, 246, 0.2);
+  }
   
+  .qr-layout {
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  @media (min-width: 640px) {
+    .qr-layout {
+      flex-direction: row;
+      align-items: flex-start;
+    }
+  }
+  
+  .qr-code-wrapper {
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  @media (min-width: 640px) {
+    .qr-code-wrapper {
+      align-items: flex-start;
+    }
+  }
+  
+  .qr-label {
+    font-size: 1rem;
+    font-weight: 500;
+    color: #6b7280;
+    margin-bottom: 0.75rem;
+  }
+  
+  .qr-code-container {
+    display: inline-block;
+    padding: 1rem;
+    background: white;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+  }
+  
+  .qr-code-container:hover {
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  }
+
+  .qr-actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+  }
+  
+  .btn-download {
+    margin-top: 0.75rem;
+    min-width: 190px;
+    padding: 0.55rem 0.9rem;
+    border: 1px solid #d1d5db;
+    border-radius: 0.375rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    font-size: 0.92rem;
+    font-weight: 400;
+    align-self: center;
+    transition: transform 0.3s;
+    background: linear-gradient(90deg, #8B5CF6, #7c3aedd4);
+    color: #fff;
+  }
+  .btn-download:hover {
+    background: linear-gradient(90deg, #7C3AED, #6D28D9);
+    transform: scale(1.05);
+  }
   @keyframes fadeIn {
     from {
       opacity: 0;
@@ -293,6 +401,14 @@
     }
     .input-group {
       flex-direction: column;
+    }
+  }
+  @media (max-width: 400px) {
+    .hero-section {
+      padding: 48px 8px;
+    }
+    .url-shortener-card {
+      padding: 32px 16px;
     }
   }
   

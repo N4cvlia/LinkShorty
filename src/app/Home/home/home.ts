@@ -1,14 +1,17 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { SupabaseService } from '../../Services/supabase';
 import { FormsModule } from '@angular/forms';
+import { QRCodeComponent } from 'angularx-qrcode';
 
 @Component({
   selector: 'app-home',
-  imports: [FormsModule],
+  imports: [FormsModule, QRCodeComponent],
   templateUrl: './home.html',
   styleUrl: './home.css'
 })
 export class Home {
+  @ViewChild('qrcode', { static: false }) qrcode!: ElementRef;
+
   url: string = '';
   loading: boolean = false;
   result: { shortCode: string; shortUrl: string; originalUrl: string } | null = null;
@@ -64,5 +67,21 @@ export class Home {
         this.copied = false;
       }, 2000);
     }
+  }
+
+  downloadQRCode() {
+    const canvas = this.qrcode.nativeElement.querySelector('canvas');
+    if(!canvas) return;
+
+    canvas.toBlob((blob: Blob | null) => {
+      if(blob) {
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement('a');
+        link.href = url;
+        link.download = `qr-code-${this.result?.shortCode}.png`;
+        link.click();
+        URL.revokeObjectURL(url);
+      }
+    });
   }
 }

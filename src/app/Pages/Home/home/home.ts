@@ -1,5 +1,5 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { SupabaseService } from '../../Services/supabase';
+import { SupabaseService } from '../../../Services/supabase';
 import { FormsModule } from '@angular/forms';
 import { QRCodeComponent } from 'angularx-qrcode';
 
@@ -14,9 +14,10 @@ export class Home {
 
   url: string = '';
   loading: boolean = false;
-  result: { shortCode: string; shortUrl: string; originalUrl: string } | null = null;
+  result: { shortCode: string; shortUrl: string; originalUrl: string; statsUrl: string } | null = null;
   error: string = '';
   copied: boolean = false;
+  closed: boolean = true;
 
   constructor(private supabaseService: SupabaseService) {}
 
@@ -27,8 +28,8 @@ export class Home {
     }
   }
 
-  saveLastShortened(shortCode: string, shortUrl: string, originalUrl: string) {
-    const data = { shortCode, shortUrl, originalUrl };
+  saveLastShortened(shortCode: string, shortUrl: string, originalUrl: string, statsUrl: string) {
+    const data = { shortCode, shortUrl, originalUrl, statsUrl };
     localStorage.setItem('lastShortened', JSON.stringify(data));
   }
 
@@ -49,7 +50,7 @@ export class Home {
 
     try {
       this.result = await this.supabaseService.ShortenUrl(this.url.trim());
-      this.saveLastShortened(this.result.shortCode, this.result.shortUrl, this.result.originalUrl);
+      this.saveLastShortened(this.result.shortCode, this.result.shortUrl, this.result.originalUrl, this.result.statsUrl);
     } catch(err: any) {
       this.error = err.message || 'Failed to shorten URL';
       console.error('Error:', err);
@@ -83,5 +84,8 @@ export class Home {
         URL.revokeObjectURL(url);
       }
     });
+  }
+  closeIt() {
+    this.closed = !this.closed;
   }
 }

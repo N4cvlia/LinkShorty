@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { createClient , SupabaseClient} from '@supabase/supabase-js';
+import { UrlStats } from '../Interfaces/url-stats';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +22,7 @@ export class SupabaseService {
   }
 
   async ShortenUrl(url: string): Promise<{shortCode: string;
-    shortUrl: string; originalUrl: string
+    shortUrl: string; originalUrl: string; statsUrl: string
   }> {
     const token = await (window as any).grecaptcha.execute('6Ld83O8rAAAAAD3hI-7akxvtb4bgWQJVltdwvmzK', { action: 'shorten'});
     const { data, error} = await
@@ -54,5 +55,29 @@ export class SupabaseService {
     .eq('short_code', shortCode);
 
     if(error) console.error('Failed to increment clicks:', error);
+  }
+
+  async getStatsByToken(token: string): Promise<{data: UrlStats | null; error: string | null }> {
+    try {
+      const { data, error } = await this.supabase
+        .from('urls')
+        .select('original_url, short_code, clicks, created_at')
+        .eq('management_token', token)
+        .maybeSingle();
+
+      if(error) {
+        console.error('Supabase error:', error);
+        return { data: null, error: 'Database error occurred' };
+      }
+
+      if(!data) {
+        return { data: null, error: 'No data found for the provided token' };
+      }
+
+      return {data, error: null};
+    } catch (err) {
+      console.error('Error fetching stats:', err);
+      return { data: null, error: 'Failed to load statistics' };
+    }
   }
 }

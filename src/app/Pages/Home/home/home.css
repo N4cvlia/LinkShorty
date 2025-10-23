@@ -285,9 +285,6 @@
     border: 1px solid rgba(226, 228, 233, 0.8);
     border-radius: 12px;
     text-overflow: ellipsis;
-    
-    
-    
     word-break: break-all;
     padding: 15px 12px;
   }

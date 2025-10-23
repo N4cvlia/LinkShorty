@@ -48,13 +48,14 @@ export class SupabaseService {
     return data;
   }
 
-  async incrementClicks(shortCode: string, currentClicks: number) {
-    const { error } = await this.supabase
-    .from('urls')
-    .update({ clicks: currentClicks + 1 })
-    .eq('short_code', shortCode);
-
-    if(error) console.error('Failed to increment clicks:', error);
+  async incrementClicks(shortCode: string) {
+    fetch(`https://gnuyfalawunhjgublxsu.supabase.co/functions/v1/increment-clicks`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ shortCode })
+    }).catch(err => console.error('Failed to increment clicks via function:', err));
   }
 
   async getStatsByToken(token: string): Promise<{data: UrlStats | null; error: string | null }> {

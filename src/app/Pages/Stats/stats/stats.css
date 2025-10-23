@@ -9,6 +9,7 @@
     --border: 214.3 31.8% 91.4%;
     --input: 214.3 31.8% 91.4%;
     --card: 0 0% 100%;
+    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
   }
   
 .stats-loading-container {
@@ -233,18 +234,23 @@
   }
   
   .stat-box-primary {
-    background: hsl(var(--primary) / 0.05);
-    border-color: hsl(var(--primary) / 0.2);
+    background: rgba(95, 66, 240, 0.05);
+    border: 1px solid rgba(95, 66, 240, 0.2);
   }
   
   .stat-box-accent {
-    background: hsl(var(--accent) / 0.1);
-    border-color: hsl(var(--accent) / 0.2);
+    background: rgba(35, 193, 246, 0.1);
+    border: 1px solid rgba(35, 193, 246, 0.2);
   }
   
   .stat-box-muted {
     background: hsl(var(--muted) / 0.3);
-    border-color: hsl(var(--border) / 0.3);
+    border: 1px solid rgba(226, 228, 233, 0.6);
+    display: flex;
+    flex-direction: column;
+    text-overflow: ellipsis;
+    word-break: break-all;
+    font-size: 14px;
   }
   
   .stat-box-header {
@@ -252,6 +258,8 @@
     align-items: center;
     gap: 0.5rem;
     margin-bottom: 0.5rem;
+    font-size: 14px;
+    color: rgb(103, 111, 126);
   }
   
   .stat-icon {
@@ -287,7 +295,7 @@
   }
   
   .stat-value-primary {
-    color: hsl(var(--primary));
+    color: rgb(95, 66, 240);
   }
   
   .stat-date {
@@ -297,7 +305,7 @@
   }
   
   .stat-link {
-    color: hsl(var(--primary));
+    color: rgb(95, 66, 240);
     font-weight: 500;
     word-break: break-all;
     text-decoration: none;
@@ -308,6 +316,7 @@
   }
   
   .stat-original-link {
+    display: flex;
     font-size: 0.875rem;
     color: hsl(var(--foreground) / 0.8);
     word-break: break-all;
@@ -315,7 +324,7 @@
   }
   
   .stat-original-link:hover {
-    color: hsl(var(--primary));
+    color: rgb(95, 66, 240);
   }
   
   /* Footer */

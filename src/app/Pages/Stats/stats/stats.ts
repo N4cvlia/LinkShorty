@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { UrlStats } from '../../../Interfaces/url-stats';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SupabaseService } from '../../../Services/supabase';
+import { StatsResolveData } from '../../../Interfaces/stats-resolve-data';
 
 @Component({
   selector: 'app-stats',
@@ -11,6 +12,7 @@ import { SupabaseService } from '../../../Services/supabase';
 })
 export class Stats implements OnInit{
   loading = false;
+  closed = true;
   stats: UrlStats | null = null;
   error: string | null = null;
 
@@ -21,24 +23,28 @@ export class Stats implements OnInit{
   ){}
 
   async ngOnInit(){
-    await this.loadStats();
+    // await this.loadStats();
+    const resolvedData: StatsResolveData = this.route.snapshot.data['statsData'];
+
+    this.stats = resolvedData.stats;
+    this.error = resolvedData.error;
   }
 
-  private async loadStats(){
-    const token = this.route.snapshot.paramMap.get('token');
+  // private async loadStats(){
+  //   const token = this.route.snapshot.paramMap.get('token');
 
-    if(!token){
-      this.error = 'Invalid stats link';
-      this.loading = false;
-      return;
-    }
+  //   if(!token){
+  //     this.error = 'Invalid stats link';
+  //     this.loading = false;
+  //     return;
+  //   }
 
-    const { data, error } = await this.supabaseService.getStatsByToken(token);
+  //   const { data, error } = await this.supabaseService.getStatsByToken(token);
 
-    this.stats = data;
-    this.error = error;
-    this.loading = false;
-  }
+  //   this.stats = data;
+  //   this.error = error;
+  //   this.loading = false;
+  // }
 
   get shortUrl(): string {
     return `${window.location.origin}/${this.stats?.short_code}`;
@@ -56,5 +62,8 @@ export class Stats implements OnInit{
 
   goHome() {
     this.router.navigate(['/']);
+  }
+  closeIt() {
+    this.closed = !this.closed;
   }
 }

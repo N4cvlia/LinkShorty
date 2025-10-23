@@ -31,7 +31,7 @@ export class Redirect implements OnInit{
       const data = await this.supabaseService.getUrlByShortCode(shortCode);
       console.log('Got data:', data);
 
-      this.supabaseService.incrementClicks(shortCode, data?.clicks);
+      this.supabaseService.incrementClicks(shortCode);
 
       window.location.href = data?.original_url;
     } catch (err) {

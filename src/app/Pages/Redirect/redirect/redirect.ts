@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SupabaseService } from '../../../Services/supabase';
+import { firstValueFrom } from 'rxjs';
 
 
 @Component({
@@ -30,9 +31,13 @@ export class Redirect implements OnInit{
       console.log('Fetching URL for:', shortCode); 
       const data = await this.supabaseService.getUrlByShortCode(shortCode);
       console.log('Got data:', data);
-
-      this.supabaseService.incrementClicks(shortCode);
-
+      
+      try {
+        await this.supabaseService.incrementClicks(shortCode);
+      }catch(err) {
+        console.error('Failed to increment clicks:', err);
+      }
+      
       window.location.href = data?.original_url;
     } catch (err) {
       console.error('Redirect error:', err);

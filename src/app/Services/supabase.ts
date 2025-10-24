@@ -49,13 +49,21 @@ export class SupabaseService {
   }
 
   async incrementClicks(shortCode: string) {
-    fetch(`https://gnuyfalawunhjgublxsu.supabase.co/functions/v1/increment-clicks`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ shortCode })
-    }).catch(err => console.error('Failed to increment clicks via function:', err));
+    // fetch(`https://gnuyfalawunhjgublxsu.supabase.co/functions/v1/increment-clicks`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //     'apiKey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdudXlmYWxhd3VuaGpndWJseHN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4NDU5NjgsImV4cCI6MjA3NjQyMTk2OH0.fmM-UsA167Kxcbefc6ocLwqoNiyK_r4SMMOmNvR-LAc'
+    //   },
+    //   body: JSON.stringify({ shortCode })
+    // }).catch(err => console.error('Failed to increment clicks via function:', err));
+    const { error } = await this.supabase.functions.invoke('increment-clicks', {
+      body: { shortCode }
+    });
+
+    if (error) {
+      console.error('Failed to increment clicks via function:', error);
+    }
   }
 
   async getStatsByToken(token: string): Promise<{data: UrlStats | null; error: string | null }> {

@@ -1,0 +1,103 @@
+<!-- <div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100 p-4">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-center mb-2">Create Account</h2>
+        <p class="text-center text-gray-600 mb-6">Sign up to get started with unlimited links</p>
+
+        <form (ngSubmit)="onSubmit()" class="space-y-4">
+            <div class="space-y-2">
+                <label for="name" class="block text-sm font-medium">Name</label>
+                <input id="name" type="text" [(ngModel)]="name" name="name" placeholder="John Doe" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div class="space-y-2">
+                <label for="email" class="block text-sm font-medium">Email</label>
+                <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            <div class="space-y-2">
+                <label for="password" class="block text-sm font-medium">Password</label>
+                <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="••••••••"
+                    required
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            </div>
+
+            @if (errorMessage) {
+                <div class="text-red-600 text-sm">
+                    {{ errorMessage }}
+                </div>
+            }
+           
+            @if (successMessage) {
+                <div class="text-green-600 text-sm">
+                    {{ successMessage }}
+                </div>
+            }
+            <button type="submit" [disabled]="loading"
+                class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                {{ loading ? 'Please wait...' : 'Sign Up' }}
+            </button>
+        </form>
+
+        <div class="mt-4 text-center text-sm">
+            <a routerLink="/login" class="text-blue-600 hover:underline">
+                Already have an account? Login
+            </a>
+        </div>
+    </div>
+</div> -->
+<div class="min-h-screen flex items-center justify-center bg-gray-50 p-4">
+    <div class="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
+        <h2 class="text-2xl font-bold text-center mb-6">Create Account</h2>
+
+        <form (ngSubmit)="onSubmit()" class="space-y-4">
+            <div>
+                <label for="firstName" class="block text-sm font-medium mb-2">First Name</label>
+                <input id="firstName" type="text" [(ngModel)]="firstName" name="firstName" placeholder="John" required
+                    class="w-full px-3 py-2 border rounded-md" />
+            </div>
+
+            <div>
+                <label for="lastName" class="block text-sm font-medium mb-2">Last Name</label>
+                <input id="lastName" type="text" [(ngModel)]="lastName" name="lastName" placeholder="Doe" required
+                    class="w-full px-3 py-2 border rounded-md" />
+            </div>
+
+            <div>
+                <label for="phone" class="block text-sm font-medium mb-2">Phone Number</label>
+                <input id="phone" type="tel" [(ngModel)]="phone" name="phone" placeholder="+1234567890" required
+                    class="w-full px-3 py-2 border rounded-md" />
+            </div>
+
+            <div>
+                <label for="email" class="block text-sm font-medium mb-2">Email</label>
+                <input id="email" type="email" [(ngModel)]="email" name="email" placeholder="you@example.com" required
+                    class="w-full px-3 py-2 border rounded-md" />
+            </div>
+
+            <div>
+                <label for="password" class="block text-sm font-medium mb-2">Password</label>
+                <input id="password" type="password" [(ngModel)]="password" name="password" placeholder="••••••••"
+                    required class="w-full px-3 py-2 border rounded-md" />
+            </div>
+
+            @if (errorMessage) {
+                <div class="text-red-600 text-sm">
+                    {{ errorMessage }}
+                </div>
+            }
+            
+            <button type="submit" [disabled]="loading"
+                class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50">
+                {{ loading ? 'Please wait...' : 'Sign Up' }}
+            </button>
+
+            <div class="text-center text-sm mt-4">
+                <a routerLink="/login" class="text-blue-600 hover:underline">
+                    Already have an account? Login
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

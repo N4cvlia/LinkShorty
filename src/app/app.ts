@@ -2,10 +2,16 @@ import { Component, OnInit, signal } from '@angular/core';
 import { SupabaseService } from './Services/supabase';
 import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
+import { Navigation } from "./Components/navigation/navigation";
 
 @Component({
   selector: 'app-root',
-  imports: [FormsModule, RouterOutlet],
+  imports: [
+    FormsModule,
+    RouterOutlet,
+    Navigation,
+    
+  ],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

@@ -8,6 +8,14 @@ import { statsResolver } from './Resolvers/stats-resolver';
 export const routes: Routes = [
     { path: '', component: Home },
     {
+        path: 'login',
+        loadComponent: () => import('./Pages/login/login').then(m => m.Login)
+    },
+    {
+        path: 'signup',
+        loadComponent: () => import('./Pages/sign-up/sign-up').then(m => m.SignUp)
+    },
+    {
         path: ':shortCode',
         component: Redirect,
     },

@@ -4,16 +4,19 @@ import { Redirect } from './Pages/Redirect/redirect/redirect';
 import { Home } from './Pages/Home/home/home';
 import { Stats } from './Pages/Stats/stats/stats';
 import { statsResolver } from './Resolvers/stats-resolver';
+import { authGuard } from './Guards/auth-guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
     {
         path: 'login',
-        loadComponent: () => import('./Pages/login/login').then(m => m.Login)
+        loadComponent: () => import('./Pages/login/login').then(m => m.Login),
+        canActivate: [authGuard]
     },
     {
         path: 'signup',
-        loadComponent: () => import('./Pages/sign-up/sign-up').then(m => m.SignUp)
+        loadComponent: () => import('./Pages/sign-up/sign-up').then(m => m.SignUp),
+        canActivate: [authGuard]
     },
     {
         path: ':shortCode',

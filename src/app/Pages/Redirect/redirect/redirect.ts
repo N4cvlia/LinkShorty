@@ -28,9 +28,15 @@ export class Redirect implements OnInit{
     }
 
     try {
-      console.log('Fetching URL for:', shortCode); 
       const data = await this.supabaseService.getUrlByShortCode(shortCode);
-      console.log('Got data:', data);
+
+      if(!data) {
+        this.error = 'Short URL not found.';
+        setTimeout(() => {
+          this.router.navigate(['/']);
+        }, 2000);
+        return;
+      }
       
       try {
         await this.supabaseService.incrementClicks(shortCode);

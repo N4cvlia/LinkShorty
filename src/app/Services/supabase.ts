@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { createClient , Session, SupabaseClient} from '@supabase/supabase-js';
+import { createClient , NavigatorLockAcquireTimeoutError, Session, SupabaseClient} from '@supabase/supabase-js';
 import { UrlStats } from '../Interfaces/url-stats';
 import { environment } from '../../environments/environment';
 import { getReCaptchaToken } from '../Utils/load-recaptcha';
@@ -17,10 +17,12 @@ export class SupabaseService {
       {
         auth: {
           persistSession: true,
-          autoRefreshToken: true
+          autoRefreshToken: true,
+          detectSessionInUrl: true,
+          flowType: 'pkce',
         }
-      }
-      );
+      });
+
   }
   // ========== AUTH METHODS ==========
 
@@ -71,6 +73,7 @@ export class SupabaseService {
   onAuthStateChange(callback: (event: any, session: Session | null) => void) {
     return this.supabase.auth.onAuthStateChange(callback);
   }
+
 
 
   // ========== URL METHODS ==========

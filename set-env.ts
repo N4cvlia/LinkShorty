@@ -6,11 +6,11 @@ const envFileContent = `
 export const environment = {
     production: true,
     supabase: {
-    url: '${process.env.SUPABASE_URL}',
-    anonKey: '${process.env.SUPABASE_ANON_KEY}',
+    url: '${process.env['SUPABASE_URL']}',
+    anonKey: '${process.env['SUPABASE_ANON_KEY']}',
     storageKey: ''
     },
-    reCaptchaKey: '${process.env.RECAPTCHA_KEY}'
+    reCaptchaKey: '${process.env['RECAPTCHA_KEY']}'
 };
 `;
 

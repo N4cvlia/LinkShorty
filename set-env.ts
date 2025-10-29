@@ -1,6 +1,12 @@
-import { writeFileSync } from 'fs';
+import { writeFileSync, readFileSync } from 'fs';
 
-const targetPath = './src/environments/environment.prod.ts';
+const targetPathProd = './src/environments/environment.prod.ts';
+const targetPath = './src/environments/environment.ts';
+const examplePath = './src/environments/environment.example.ts';
+
+const exampleContent = readFileSync(examplePath, 'utf8');
+
+writeFileSync(targetPath, exampleContent);
 
 const envFileContent = `
 export const environment = {
@@ -14,6 +20,6 @@ export const environment = {
 };
 `;
 
-writeFileSync(targetPath, envFileContent);
+writeFileSync(targetPathProd, envFileContent);
 
 console.log(`Environment file generated at ${targetPath}`);

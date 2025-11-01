@@ -19,6 +19,10 @@ export const routes: Routes = [
         canActivate: [authGuard]
     },
     {
+        path: 'dashboard',
+        loadComponent: () => import('./Pages/Dashboard/dashboard/dashboard').then(m => m.Dashboard)
+    },
+    {
         path: ':shortCode',
         component: Redirect,
     },

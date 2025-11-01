@@ -1,0 +1,127 @@
+
+<div class="min-h-screen bg-background">
+  <div class="container mx-auto  pt-8 pb-8 max-w-full md:max-w-3xl lg:max-w-5xl">
+    <!-- Loading State -->
+     @if (loading) {
+        <div class="flex items-center justify-center py-20">
+            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+          </div>
+
+    <!-- Dashboard Content -->
+    
+     }@else {
+        <div class="card">
+            <div class="card-header">
+              <h1 class="card-title">My Shortened Links</h1>
+              <p class="card-description">
+                Manage and track all your shortened URLs in one place
+              </p>
+            </div>
+      
+            <div class="card-content">
+              <!-- Empty State -->
+               @if (urls.length === 0) {
+                <div class="text-center py-12">
+                    <p class="text-muted-foreground mb-4">You haven't created any short links yet.</p>
+                    <button (click)="navigateToHome()" class="btn btn-primary">
+                      Create Your First Link
+                    </button>
+                  </div>
+               }
+            
+              <!-- Table with URLs -->
+               @if (urls.length > 0) {
+                <div class="rounded-md border">
+                <table class="table">
+                  <thead>
+                    <tr class="table-header-row">
+                      <th class="table-head">Short URL</th>
+                      <th class="table-head">Original URL</th>
+                      <th class="table-head text-center">Clicks</th>
+                      <th class="table-head">Created</th>
+                      <th class="table-head text-right">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    @for (url of urls; track $index) {
+                        <tr class="table-row">
+                            <!-- Short URL -->
+                            <td class="table-cell font-medium">
+                              <a 
+                                [href]="'/' + url.short_code" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                class="text-primary hover:underline inline-flex items-center gap-1"
+                              >
+                                {{ currentHost }}/{{ url.short_code }}
+                                <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
+                                  <polyline points="15 3 21 3 21 9"></polyline>
+                                  <line x1="10" y1="14" x2="21" y2="3"></line>
+                                </svg>
+                              </a>
+                            </td>
+            
+                            <!-- Original URL -->
+                            <td class="table-cell max-w-xs truncate">
+                              <a 
+                                [href]="url.original_url" 
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                class="text-muted-foreground hover:text-foreground hover:underline"
+                              >
+                                {{ url.original_url }}
+                              </a>
+                            </td>
+            
+                            <!-- Clicks -->
+                            <td class="table-cell text-center">
+                              <span class="text-lg font-semibold">{{ url.clicks }}</span>
+                            </td>
+            
+                            <!-- Created Date -->
+                            <td class="table-cell text-muted-foreground">
+                              {{ formatDate(url.created_at) }}
+                            </td>
+            
+                            <!-- Actions -->
+                            <td class="table-cell text-right">
+                              <div class="flex justify-end gap-2">
+                                <!-- Copy Button -->
+                                <button 
+                                  (click)="copyToClipboard(url.short_code)"
+                                  class="btn btn-ghost btn-sm"
+                                  title="Copy to clipboard"
+                                >
+                                  <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                  </svg>
+                                </button>
+                                
+                                <!-- Stats Button -->
+                                <button 
+                                  (click)="viewStats(url.management_token)"
+                                  class="btn btn-ghost btn-sm"
+                                  title="View statistics"
+                                >
+                                  <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <line x1="18" y1="20" x2="18" y2="10"></line>
+                                    <line x1="12" y1="20" x2="12" y2="4"></line>
+                                    <line x1="6" y1="20" x2="6" y2="14"></line>
+                                  </svg>
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                    }
+                  </tbody>
+                </table>
+              </div>
+               }
+            </div>
+          </div>
+     }
+  </div>
+</div>
+

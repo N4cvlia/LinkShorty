@@ -3,6 +3,7 @@ import { createClient , NavigatorLockAcquireTimeoutError, Session, SupabaseClien
 import { UrlStats } from '../Interfaces/url-stats';
 import { environment } from '../../environments/environment';
 import { getReCaptchaToken } from '../Utils/load-recaptcha';
+import { UrlData } from '../Interfaces/url-data';
 
 @Injectable({
   providedIn: 'root'
@@ -80,12 +81,14 @@ export class SupabaseService {
   async ShortenUrl(url: string): Promise<{shortCode: string;
     shortUrl: string; originalUrl: string; statsUrl: string
   }> {
+    const session = await this.getSession();
     const token = await getReCaptchaToken();
     const { data, error} = await
     this.supabase.functions.invoke('shorten-url', {
       body: { 
         url: url,
-        recaptchaToken: token
+        recaptchaToken: token,
+        userId: session?.data.session?.user.id || null
       }
     });
 
@@ -105,14 +108,6 @@ export class SupabaseService {
   }
 
   async incrementClicks(shortCode: string) {
-    // fetch(`https://gnuyfalawunhjgublxsu.supabase.co/functions/v1/increment-clicks`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //     'apiKey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdudXlmYWxhd3VuaGpndWJseHN1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA4NDU5NjgsImV4cCI6MjA3NjQyMTk2OH0.fmM-UsA167Kxcbefc6ocLwqoNiyK_r4SMMOmNvR-LAc'
-    //   },
-    //   body: JSON.stringify({ shortCode })
-    // }).catch(err => console.error('Failed to increment clicks via function:', err));
     const { error } = await this.supabase.functions.invoke('increment-clicks', {
       body: { shortCode }
     });
@@ -148,5 +143,21 @@ export class SupabaseService {
 
   getClient(): SupabaseClient {
     return this.supabase;
+  }
+  async fetchUserUrls(userId: string): Promise<UrlData[]> {
+    try {
+      const { data, error } = await this.supabase
+        .from('urls')
+        .select('id, short_code, original_url, clicks, created_at, management_token')
+        .eq('user_id', userId)
+        .order('created_at', { ascending: false });
+
+        if(error) throw error;
+
+        return (data || []) as UrlData[];
+    }catch(error){
+      console.error("Error fetching URLs:", error);
+      throw new Error('Failed to fetch URLS')
+    }
   }
 }

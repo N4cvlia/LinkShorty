@@ -40,4 +40,8 @@ export class Navigation implements OnInit, OnDestroy{
   navigateToAuth() {
     this.router.navigate(['/login']);
   }
+
+  navigateToDashboard() {
+    this.router.navigate(['/dashboard']);
+  }
 }

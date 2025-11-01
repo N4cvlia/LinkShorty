@@ -11,6 +11,7 @@ import { StatsResolveData } from '../../../Interfaces/stats-resolve-data';
   styleUrl: './stats.css'
 })
 export class Stats implements OnInit{
+  private fromPage: string = 'home';
   loading = false;
   closed = true;
   stats: UrlStats | null = null;
@@ -25,6 +26,11 @@ export class Stats implements OnInit{
   async ngOnInit(){
     // await this.loadStats();
     const resolvedData: StatsResolveData = this.route.snapshot.data['statsData'];
+    const state = window.history.state;
+
+    if(state && state.from) {
+      this.fromPage = state.from;
+    }
 
     this.stats = resolvedData.stats;
     this.error = resolvedData.error;
@@ -59,7 +65,13 @@ export class Stats implements OnInit{
       minute: '2-digit'
     })
   }
-
+  goBack() {
+    if(this.fromPage === 'home') {
+      this.router.navigate(['/']);
+    }else {
+      this.router.navigate(['/dashboard']);
+    }
+  }
   goHome() {
     this.router.navigate(['/']);
   }

@@ -5,6 +5,7 @@ import { Home } from './Pages/Home/home/home';
 import { Stats } from './Pages/Stats/stats/stats';
 import { statsResolver } from './Resolvers/stats-resolver';
 import { authGuard } from './Guards/auth-guard';
+import { loginGuard } from './Guards/login-guard';
 
 export const routes: Routes = [
     { path: '', component: Home },
@@ -20,7 +21,8 @@ export const routes: Routes = [
     },
     {
         path: 'dashboard',
-        loadComponent: () => import('./Pages/Dashboard/dashboard/dashboard').then(m => m.Dashboard)
+        loadComponent: () => import('./Pages/Dashboard/dashboard/dashboard').then(m => m.Dashboard),
+        canActivate: [loginGuard]
     },
     {
         path: ':shortCode',

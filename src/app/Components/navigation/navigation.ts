@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnDestroy, OnInit, ViewChild, viewChild } from '@angular/core';
 import { User } from '@supabase/supabase-js';
 import { Subscription } from 'rxjs';
 import { Auth } from '../../Services/auth';
@@ -14,6 +14,14 @@ import { CommonModule } from '@angular/common';
 export class Navigation implements OnInit, OnDestroy{
   user: User | null = null;
   private userSubscription?: Subscription;
+  profileVisib: boolean = false;
+  @ViewChild("profileDropdown") profileDropdown! : ElementRef;
+  @HostListener("document:click", ['$event'])
+  onDocumentClick(event : Event) {
+    if(!this.profileDropdown.nativeElement.contains(event.target)) {
+      this.profileVisib = false
+    }
+  }
 
   constructor(
     private authService: Auth,
@@ -39,9 +47,15 @@ export class Navigation implements OnInit, OnDestroy{
 
   navigateToAuth() {
     this.router.navigate(['/login']);
+    this.profileVisib = false;
   }
 
   navigateToDashboard() {
     this.router.navigate(['/dashboard']);
+    this.profileVisib = false;
+  }
+  profileDrop(event: Event) {
+    event.stopPropagation();
+    this.profileVisib = !this.profileVisib
   }
 }

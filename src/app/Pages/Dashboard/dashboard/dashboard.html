@@ -31,15 +31,15 @@
             
               <!-- Table with URLs -->
                @if (urls.length > 0) {
-                <div class="rounded-md border">
+                <div class="rounded-md border overflow-auto">
                 <table class="table">
                   <thead>
                     <tr class="table-header-row">
                       <th class="table-head">Short URL</th>
                       <th class="table-head">Original URL</th>
                       <th class="table-head text-center">Clicks</th>
-                      <th class="table-head">Created</th>
-                      <th class="table-head text-right">Actions</th>
+                      <th class="table-head text-center">Created</th>
+                      <th class="table-head text-center">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -51,7 +51,7 @@
                                 [href]="'/' + url.short_code" 
                                 target="_blank" 
                                 rel="noopener noreferrer"
-                                class="text-primary hover:underline inline-flex items-center gap-1"
+                                class="text-[rgb(95,66,240)] hover:underline inline-flex items-center gap-1 "
                               >
                                 {{ currentHost }}/{{ url.short_code }}
                                 <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -80,17 +80,17 @@
                             </td>
             
                             <!-- Created Date -->
-                            <td class="table-cell text-muted-foreground">
+                            <td class="table-cell text-center">
                               {{ formatDate(url.created_at) }}
                             </td>
             
                             <!-- Actions -->
                             <td class="table-cell text-right">
-                              <div class="flex justify-end gap-2">
+                              <div class="flex justify-around gap-1">
                                 <!-- Copy Button -->
                                 <button 
                                   (click)="copyToClipboard(url.short_code)"
-                                  class="btn btn-ghost btn-sm"
+                                  class="btn btn-ghost btn-sm hover:bg-[rgb(35,193,246)]! hover:text-white! hover:border-[rgb(35,193,246)] cursor-pointer transition-colors! duration-250"
                                   title="Copy to clipboard"
                                 >
                                   <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -102,7 +102,7 @@
                                 <!-- Stats Button -->
                                 <button 
                                   (click)="viewStats(url.management_token)"
-                                  class="btn btn-ghost btn-sm"
+                                  class="btn btn-ghost btn-sm hover:bg-[rgb(35,193,246)]! hover:text-white! hover:border-[rgb(35,193,246)] cursor-pointer transition-colors! duration-250"
                                   title="View statistics"
                                 >
                                   <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">

@@ -1,4 +1,4 @@
-<header class="border-b border-gray-200 bg-white/95 backdrop-blur relative">
+<header class="fixed top-0 border-b border-gray-200 bg-white/95 backdrop-blur w-full z-1000 " [ngClass]="isScrolled ? 'scrolled': ''">
     <div class="container mx-auto px-4 py-4 flex items-center justify-between">
         <a routerLink="/" class="flex items-center space-x-2">
             <svg class="h-6 w-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -55,7 +55,7 @@
     </div>
     
 </header>
-<div class="profileDropdown flex sm:hidden duration-300 flex-col origin-top border-gray-500 rounded-b-xl absolute z-50 bg-white shadow-lg w-full" [style.transform]="profileVisib ? 'scaleY(1)' : 'scaleY(0)'" [style.max-height]="profileVisib ? '300px' : '0'"  #profileDropdown>
+<div class="profileDropdown flex sm:hidden duration-300 flex-col origin-top border-gray-500 rounded-b-xl z-50 bg-white shadow-lg fixed left-1/2 transform -translate-x-1/2" [style.transform]="profileVisib ? 'scaleY(1)' : 'scaleY(0)'" [style.max-height]="profileVisib ? '300px' : '0'" [ngClass]="isScrolled ? 'w-4/5 top-17' : 'w-full top-16'" #profileDropdown>
     @if (user) {
         <button (click)="navigateToDashboard()"
         class="px-4 py-3 text-sm hover:bg-[rgb(35,193,246)] hover:text-white hover:border-[rgb(35,193,246)] cursor-pointer transition-colors duration-250">

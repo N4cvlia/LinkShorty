@@ -15,12 +15,18 @@ export class Navigation implements OnInit, OnDestroy{
   user: User | null = null;
   private userSubscription?: Subscription;
   profileVisib: boolean = false;
+  isScrolled: boolean = false;
+  
   @ViewChild("profileDropdown") profileDropdown! : ElementRef;
   @HostListener("document:click", ['$event'])
   onDocumentClick(event : Event) {
     if(!this.profileDropdown.nativeElement.contains(event.target)) {
       this.profileVisib = false
     }
+  }
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    this.isScrolled = window.scrollY > 79.5;
   }
 
   constructor(

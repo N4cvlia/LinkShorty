@@ -26,7 +26,7 @@ export class Navigation implements OnInit, OnDestroy{
   }
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isScrolled = window.scrollY > 79.5;
+    this.isScrolled = window.scrollY > 30;
   }
 
   constructor(

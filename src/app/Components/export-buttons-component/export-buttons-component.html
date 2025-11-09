@@ -1,0 +1,88 @@
+<div class="relative" #exportDropdown>
+    <button 
+      (click)="toggleExportDropdown()"
+      [disabled]="loading"
+      class="inline-flex items-center gap-2 px-4 py-2.5 bg-white border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-200 text-sm font-medium shadow-sm hover:shadow-md disabled:opacity-50 disabled:cursor-not-allowed"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+      </svg>
+      Export Data
+      <svg class="w-4 h-4 transition-transform duration-200" [class.rotate-180]="showExportDropDown" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+      </svg>
+    </button>
+    
+    <!-- Export Dropdown Menu -->
+    @if (showExportDropDown) {
+      <div class="absolute right-0 top-12 w-48 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-10">
+        <button 
+          (click)="onExportPDF()"
+          [disabled]="exporting"
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group disabled:opacity-50"
+        >
+          <div class="h-8 w-8 rounded-lg bg-red-50 flex items-center justify-center group-hover:bg-red-100 transition-colors">
+            <svg class="w-4 h-4 text-red-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <div class="text-left">
+            <div class="font-medium">Export as PDF</div>
+            <div class="text-xs text-gray-500">Professional report</div>
+          </div>
+        </button>
+        
+        <button 
+          (click)="onExportCSV()"
+          [disabled]="exporting"
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group disabled:opacity-50"
+        >
+          <div class="h-8 w-8 rounded-lg bg-green-50 flex items-center justify-center group-hover:bg-green-100 transition-colors">
+            <svg class="w-4 h-4 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+            </svg>
+          </div>
+          <div class="text-left">
+            <div class="font-medium">Export as CSV</div>
+            <div class="text-xs text-gray-500">Spreadsheet data</div>
+          </div>
+        </button>
+        
+        <div class="border-t border-gray-200 my-2"></div>
+        
+        <button 
+          (click)="printPage()"
+          class="w-full flex items-center gap-3 px-4 py-3 text-sm text-gray-700 hover:bg-gray-50 transition-colors group"
+        >
+          <div class="h-8 w-8 rounded-lg bg-blue-50 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+            <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z"></path>
+            </svg>
+          </div>
+          <div class="text-left">
+            <div class="font-medium">Print Report</div>
+            <div class="text-xs text-gray-500">Printer-friendly</div>
+          </div>
+        </button>
+      </div>
+    }
+  </div>
+  
+  <!-- Loading State for Exports -->
+  @if (exporting) {
+    <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div class="bg-white rounded-lg p-6 max-w-sm mx-4 shadow-xl">
+        <div class="flex items-center gap-3">
+          <div class="h-6 w-6 text-blue-600 animate-spin">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 2v4m0 12v4m8-10h-4M6 12H2m15.364-7.364l-2.828 2.828M7.464 17.536l-2.828 2.828m12.728 0l-2.828-2.828M7.464 6.464L4.636 3.636"></path>
+            </svg>
+          </div>
+          <div>
+            <p class="font-medium text-gray-900">Preparing export...</p>
+            <p class="text-sm text-gray-500">This may take a few seconds</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  }

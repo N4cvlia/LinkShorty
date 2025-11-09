@@ -1,127 +1,218 @@
-
-<div class="min-h-screen bg-background">
-  <div class="container mx-auto  pt-8 pb-8 max-w-full md:max-w-3xl lg:max-w-5xl">
+<div class="min-h-screen bg-gradient-to-br from-[hsl(262_83%_98%)] via-white to-[hsl(280_100%_98%)]">
+  <div class="container mx-auto pt-6 pb-6 max-w-full px-4 sm:px-6">
     <!-- Loading State -->
-     @if (loading) {
-        <div class="flex items-center justify-center py-20">
-            <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-          </div>
+    @if (loading) {
+      <div class="flex items-center justify-center py-16">
+        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-[rgb(95,66,240)]"></div>
+      </div>
+    } @else {
+      <!-- Header -->
+      <div class="flex items-center gap-3 mb-6">
+        <button (click)="navigateToHome()"
+            class="inline-flex cursor-pointer items-center justify-center gap-2 rounded-lg text-sm font-medium transition-all h-9 px-3 hover:bg-[rgb(95,66,240)]/10 border border-gray-300 text-gray-700">
+            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="m12 19-7-7 7-7" />
+                <path d="M19 12H5" />
+            </svg>
+            Back
+        </button>
+      </div>
 
-    <!-- Dashboard Content -->
-    
-     }@else {
-        <div class="card">
-            <div class="card-header">
-              <h1 class="card-title">My Shortened Links</h1>
-              <p class="card-description">
-                Manage and track all your shortened URLs in one place
-              </p>
-            </div>
-      
-            <div class="card-content">
-              <!-- Empty State -->
-               @if (urls.length === 0) {
-                <div class="text-center py-12">
-                    <p class="text-muted-foreground mb-4">You haven't created any short links yet.</p>
-                    <button (click)="navigateToHome()" class="btn btn-primary">
-                      Create Your First Link
-                    </button>
-                  </div>
-               }
-            
-              <!-- Table with URLs -->
-               @if (urls.length > 0) {
-                <div class="rounded-md border overflow-auto">
-                <table class="table">
-                  <thead>
-                    <tr class="table-header-row">
-                      <th class="table-head">Short URL</th>
-                      <th class="table-head">Original URL</th>
-                      <th class="table-head text-center">Clicks</th>
-                      <th class="table-head text-center">Created</th>
-                      <th class="table-head text-center">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    @for (url of urls; track $index) {
-                        <tr class="table-row">
-                            <!-- Short URL -->
-                            <td class="table-cell font-medium">
-                              <a 
-                                [href]="'/' + url.short_code" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                class="text-[rgb(95,66,240)] hover:underline inline-flex items-center gap-1 "
-                              >
-                                {{ currentHost }}/{{ url.short_code }}
-                                <svg class="h-3 w-3" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                  <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path>
-                                  <polyline points="15 3 21 3 21 9"></polyline>
-                                  <line x1="10" y1="14" x2="21" y2="3"></line>
-                                </svg>
-                              </a>
-                            </td>
-            
-                            <!-- Original URL -->
-                            <td class="table-cell max-w-xs truncate">
-                              <a 
-                                [href]="url.original_url" 
-                                target="_blank" 
-                                rel="noopener noreferrer"
-                                class="text-muted-foreground hover:text-foreground hover:underline"
-                              >
-                                {{ url.original_url }}
-                              </a>
-                            </td>
-            
-                            <!-- Clicks -->
-                            <td class="table-cell text-center">
-                              <span class="text-lg font-semibold">{{ url.clicks }}</span>
-                            </td>
-            
-                            <!-- Created Date -->
-                            <td class="table-cell text-center">
-                              {{ formatDate(url.created_at) }}
-                            </td>
-            
-                            <!-- Actions -->
-                            <td class="table-cell text-right">
-                              <div class="flex justify-around gap-1">
-                                <!-- Copy Button -->
-                                <button 
-                                  (click)="copyToClipboard(url.short_code)"
-                                  class="btn btn-ghost btn-sm hover:bg-[rgb(35,193,246)]! hover:text-white! hover:border-[rgb(35,193,246)] cursor-pointer transition-colors! duration-250"
-                                  title="Copy to clipboard"
-                                >
-                                  <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
-                                    <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
-                                  </svg>
-                                </button>
-                                
-                                <!-- Stats Button -->
-                                <button 
-                                  (click)="viewStats(url.management_token)"
-                                  class="btn btn-ghost btn-sm hover:bg-[rgb(35,193,246)]! hover:text-white! hover:border-[rgb(35,193,246)] cursor-pointer transition-colors! duration-250"
-                                  title="View statistics"
-                                >
-                                  <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                                    <line x1="18" y1="20" x2="18" y2="10"></line>
-                                    <line x1="12" y1="20" x2="12" y2="4"></line>
-                                    <line x1="6" y1="20" x2="6" y2="14"></line>
-                                  </svg>
-                                </button>
-                              </div>
-                            </td>
-                          </tr>
-                    }
-                  </tbody>
-                </table>
-              </div>
-               }
-            </div>
+      <!-- Main Card -->
+      <div class="bg-white rounded-xl shadow-[0_0_20px_rgba(95,66,240,0.1)] p-4 sm:p-6">
+        <!-- Compact Header -->
+        <div class="text-center mb-6">
+          <div class="inline-flex items-center justify-center p-2 bg-[rgb(95,66,240)]/10 rounded-xl mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[rgb(95,66,240)]">
+              <rect width="7" height="9" x="3" y="3" rx="1"></rect>
+              <rect width="7" height="5" x="14" y="3" rx="1"></rect>
+              <rect width="7" height="9" x="14" y="12" rx="1"></rect>
+              <rect width="7" height="5" x="3" y="16" rx="1"></rect>
+            </svg>
           </div>
-     }
+          <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">
+            My Links
+          </h1>
+          <p class="text-gray-500 text-sm">
+            {{ urls.length }} link{{ urls.length !== 1 ? 's' : '' }} created
+          </p>
+        </div>
+
+        <div class="pt-2">
+          <!-- Empty State -->
+          @if (urls.length === 0) {
+            <div class="text-center py-12">
+              <div class="bg-[rgb(95,66,240)]/10 rounded-2xl w-16 h-16 flex items-center justify-center mx-auto mb-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-[rgb(95,66,240)]">
+                  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+                  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+                </svg>
+              </div>
+              <p class="text-gray-500 mb-4">No links created yet</p>
+              <button (click)="navigateToHome()" 
+                class="inline-flex items-center justify-center gap-2 rounded-lg text-sm font-semibold bg-[rgb(95,66,240)] text-white hover:bg-[rgb(85,56,230)] h-10 px-6">
+                Create Link
+              </button>
+            </div>
+          }
+        
+          <!-- Mobile: Card Layout -->
+          @if (urls.length > 0) {
+            <div class="block lg:hidden space-y-4">
+              @for (url of urls; track $index) {
+                <div class="bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition-shadow">
+                  
+                  <!-- Top Row: Short URL & Actions -->
+                  <div class="flex items-start justify-between mb-3">
+                    <div class="flex-1 min-w-0">
+                      <a 
+                        [href]="'/' + url.short_code" 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        class="text-[rgb(95,66,240)] hover:underline font-semibold text-sm break-all"
+                      >
+                        {{ currentHost }}/{{ url.short_code }}
+                      </a>
+                    </div>
+                    <div class="flex gap-2 ml-3 flex-shrink-0">
+                      <button 
+                        (click)="copyToClipboard(url.short_code)"
+                        class="inline-flex items-center justify-center rounded-lg p-2 hover:bg-[rgb(35,193,246)] hover:text-white border border-gray-300 transition-colors"
+                        title="Copy"
+                      >
+                        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                          <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                        </svg>
+                      </button>
+                      <button 
+                        (click)="viewStats(url.management_token)"
+                        class="inline-flex items-center justify-center rounded-lg p-2 hover:bg-[rgb(35,193,246)] hover:text-white border border-gray-300 transition-colors"
+                        title="Stats"
+                      >
+                        <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <line x1="18" y1="20" x2="18" y2="10"></line>
+                          <line x1="12" y1="20" x2="12" y2="4"></line>
+                          <line x1="6" y1="20" x2="6" y2="14"></line>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+
+                  <!-- Middle Row: Original URL -->
+                  <div class="mb-3">
+                    <a 
+                      [href]="url.original_url" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                      class="text-gray-500 hover:text-gray-700 text-xs break-all line-clamp-2"
+                    >
+                      {{ url.original_url }}
+                    </a>
+                  </div>
+
+                  <!-- Bottom Row: Stats -->
+                  <div class="flex items-center justify-between text-xs text-gray-500">
+                    <div class="flex items-center gap-4">
+                      <span class="flex items-center gap-1">
+                        <svg class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+                        </svg>
+                        {{ url.clicks }} clicks
+                      </span>
+                      <span>{{ formatDate(url.created_at) }}</span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+
+            <!-- Desktop: Compact Table Layout -->
+            <div class="hidden lg:block rounded-lg border border-gray-200 overflow-hidden bg-white/50">
+              <table class="w-full text-sm">
+                <thead>
+                  <tr class="bg-gradient-to-r from-[rgb(95,66,240)]/5 to-[rgb(147,51,234)]/5 border-b border-gray-200">
+                    <th class="h-12 px-4 text-left align-middle font-semibold text-gray-700 w-3/12">Short URL</th>
+                    <th class="h-12 px-4 text-left align-middle font-semibold text-gray-700 w-5/12">Original URL</th>
+                    <th class="h-12 px-4 text-center align-middle font-semibold text-gray-700 w-1/12">Clicks</th>
+                    <th class="h-12 px-4 text-center align-middle font-semibold text-gray-700 w-2/12">Created</th>
+                    <th class="h-12 px-4 text-center align-middle font-semibold text-gray-700 w-1/12">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  @for (url of urls; track $index) {
+                    <tr class="border-b border-gray-100 transition-all hover:bg-[rgb(95,66,240)]/3">
+                      <!-- Short URL -->
+                      <td class="p-4 align-middle">
+                        <a 
+                          [href]="'/' + url.short_code" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          class="text-[rgb(95,66,240)] hover:underline font-medium text-sm break-all"
+                        >
+                          {{ currentHost }}/{{ url.short_code }}
+                        </a>
+                      </td>
+      
+                      <!-- Original URL -->
+                      <td class="p-4 align-middle">
+                        <a 
+                          [href]="url.original_url" 
+                          target="_blank" 
+                          rel="noopener noreferrer"
+                          class="text-gray-500 hover:text-gray-700 text-sm break-all line-clamp-1"
+                        >
+                          {{ url.original_url }}
+                        </a>
+                      </td>
+      
+                      <!-- Clicks -->
+                      <td class="p-4 align-middle text-center">
+                        <span class="inline-flex items-center justify-center bg-[rgb(35,193,246)]/10 text-[rgb(35,193,246)] font-semibold px-3 py-1 rounded-full text-sm">
+                          {{ url.clicks }}
+                        </span>
+                      </td>
+      
+                      <!-- Created Date -->
+                      <td class="p-4 align-middle text-center text-gray-500 text-sm">
+                        {{ formatDate(url.created_at) }}
+                      </td>
+      
+                      <!-- Actions -->
+                      <td class="p-4 align-middle">
+                        <div class="flex justify-center gap-2">
+                          <button 
+                            (click)="copyToClipboard(url.short_code)"
+                            class="inline-flex items-center justify-center rounded-lg p-2 hover:bg-[rgb(35,193,246)] hover:text-white border border-gray-300 transition-colors cursor-pointer"
+                            title="Copy"
+                          >
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                              <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                            </svg>
+                          </button>
+                          <button 
+                            (click)="viewStats(url.management_token)"
+                            class="inline-flex items-center justify-center rounded-lg p-2 hover:bg-[rgb(35,193,246)] hover:text-white border border-gray-300 transition-colors cursor-pointer"
+                            title="Stats"
+                          >
+                            <svg class="h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                              <line x1="18" y1="20" x2="18" y2="10"></line>
+                              <line x1="12" y1="20" x2="12" y2="4"></line>
+                              <line x1="6" y1="20" x2="6" y2="14"></line>
+                            </svg>
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </div>
+      </div>
+    }
   </div>
 </div>
-

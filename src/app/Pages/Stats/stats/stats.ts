@@ -7,15 +7,21 @@ import { ClickData } from '../../../Interfaces/click-data';
 import { ChartDataPoint } from '../../../Interfaces/chart-data-point';
 import { CommonModule } from '@angular/common';
 import { formatDistanceToNow, parseISO } from 'date-fns';
+import { ChartConfiguration, ChartData, ChartType } from 'chart.js';
+import { BaseChartDirective } from 'ng2-charts';
+import { ExportService } from '../../../Services/export';
+import { ExportData } from '../../../Interfaces/export-data';
+import { ExportButtonsComponent } from '../../../Components/export-buttons-component/export-buttons-component';
 
 @Component({
   selector: 'app-stats',
-  imports: [CommonModule],
+  imports: [CommonModule, BaseChartDirective, ExportButtonsComponent],
   templateUrl: './stats.html',
   styleUrl: './stats.css'
 })
 export class Stats implements OnInit{
   private fromPage: string = 'home';
+  exporting: boolean = false;
   loading = false;
   closed = true;
   stats: UrlStats | null = null;
@@ -32,7 +38,8 @@ export class Stats implements OnInit{
   constructor(
     private route: ActivatedRoute,
     private supabaseService: SupabaseService,
-    private router: Router
+    private router: Router,
+    private exportService: ExportService
   ){}
 
   async ngOnInit(){
@@ -84,6 +91,8 @@ export class Stats implements OnInit{
       this.browserStats = browserStats;
       this.recentClicks = recentClicks;
 
+      this.updateChartData();
+
       this.setupRealtimeUpdates();
     } catch(error) {
       console.error('Error loading advanced stats:', error);
@@ -104,6 +113,8 @@ export class Stats implements OnInit{
           if (this.stats) {
             this.stats = { ...this.stats, clicks: this.stats.clicks + 1 };
           }
+
+          this.loadAdvancedStats();
         }
       )  
   }
@@ -144,5 +155,147 @@ export class Stats implements OnInit{
   }
   closeIt() {
     this.closed = !this.closed;
+  }
+
+  // Chart.js configurations
+
+  public barChartOptions: ChartConfiguration['options'] = {
+    responsive: true,
+    maintainAspectRatio: false,
+    scales: {
+      x: {
+        grid: { display: false },
+        ticks: { color: '#9ca3af' }
+      },
+      y: {
+        beginAtZero: true,
+        ticks: { precision: 0, color: '#9ca3af' },
+        grid: { color: 'rgba(156, 163, 175, 0.1)' }
+      }
+    },
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        padding: 12,
+        cornerRadius: 8
+      }
+    }
+  };
+  public barChartData: ChartData<'bar'> = {
+    labels: [],
+    datasets: [{
+      label: 'Clicks',
+      data: [],
+      backgroundColor: 'rgb(95, 66, 240)',
+      borderRadius: 8
+    }]
+  };
+  
+  public lineChartData: ChartData<'line'> = {
+    labels: [],
+    datasets: [{
+      label: 'Clicks',
+      data: [],
+      borderColor: 'rgb(95, 66, 240)',
+      backgroundColor: 'rgba(95, 66, 240, 0.1)',
+      tension: 0.4,
+      fill: true,
+      pointRadius: 4,
+      pointHoverRadius: 6
+    }]
+  };
+  public pieChartData: ChartData<'pie'> = {
+    labels: [],
+    datasets: [{
+      data: [],
+      backgroundColor: [
+        'rgb(95, 66, 240)',
+        'rgb(59, 130, 246)',
+        'rgb(16, 185, 129)',
+        'rgb(245, 158, 11)',
+        'rgb(239, 68, 68)'
+      ]
+    }]
+  };
+  
+  public barChartType: ChartType = 'bar';
+  public lineChartType: ChartType = 'line';
+  public pieChartType: ChartType = 'pie';
+
+  // Update chart data based on loaded stats
+  private updateChartData() {
+    // Update line chart (7-day trend)
+    this.lineChartData = {
+      labels: this.chartData.map(d => d.date),
+      datasets: [{
+        label: 'Clicks',
+        data: this.chartData.map(d => d.clicks),
+        borderColor: 'rgb(95, 66, 240)',
+        backgroundColor: 'rgba(95, 66, 240, 0.1)',
+        tension: 0.4,
+        fill: true,
+        pointRadius: 4,
+        pointHoverRadius: 6
+      }]
+    };
+  
+    // Update bar chart (top countries)
+    this.barChartData = {
+      labels: this.topCounties.map(c => c.country),
+      datasets: [{
+        label: 'Clicks',
+        data: this.topCounties.map(c => c.count),
+        backgroundColor: 'rgb(95, 66, 240)',
+        borderRadius: 8
+      }]
+    };
+  
+    // Update pie chart (device stats)
+    this.pieChartData = {
+      labels: this.deviceStats.map(d => d.name),
+      datasets: [{
+        data: this.deviceStats.map(d => d.value),
+        backgroundColor: [
+          'rgb(95, 66, 240)',
+          'rgb(59, 130, 246)',
+          'rgb(16, 185, 129)',
+          'rgb(245, 158, 11)',
+          'rgb(239, 68, 68)'
+        ]
+      }]
+    };
+  }
+
+  // Export to PDF/CSV
+  get exportData(): ExportData {
+    if (!this.stats) {
+      throw new Error('Stats not available for export');
+    }
+
+    return {
+      shortUrl: this.shortUrl,
+      originalUrl: this.stats.original_url,
+      clicks: this.stats.clicks,
+      avgClicksPerDay: this.avgClicksPerDay,
+      createdDate: this.createdDate,
+      shortCode: this.stats.short_code,
+      chartData: this.chartData,
+      topCountries: this.topCounties,
+      deviceStats: this.deviceStats,
+      browserStats: this.browserStats,
+      recentClicks: this.recentClicks,
+      formatDistanceToNow: this.formatDistanceToNow.bind(this)
+    };
+  }
+
+  async exportToPDF(): Promise<void> {
+    if (!this.stats) return;
+    await this.exportService.exportToPDF(this.exportData);
+  }
+
+  exportToCSV(): void {
+    if (!this.stats) return;
+    this.exportService.exportToCSV(this.exportData);
   }
 }

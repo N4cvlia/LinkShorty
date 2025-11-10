@@ -4,14 +4,16 @@ import { FormsModule } from '@angular/forms';
 import { RouterOutlet } from '@angular/router';
 import { Navigation } from "./Components/navigation/navigation";
 import { NgChartsConfiguration } from 'ng2-charts';
+import { ToastComponent } from "./Components/toast/toast";
 
 @Component({
   selector: 'app-root',
   imports: [
     FormsModule,
     RouterOutlet,
-    Navigation,    
-  ],
+    Navigation,
+    ToastComponent
+],
   templateUrl: './app.html',
   styleUrl: './app.css'
 })

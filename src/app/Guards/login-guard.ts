@@ -12,5 +12,6 @@ export const loginGuard: CanActivateFn = async (route, state) => {
     router.navigate(['/']);
     return false;
   }
+  
   return true;
 };

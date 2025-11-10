@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Session, User } from '@supabase/supabase-js';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { SupabaseService } from './supabase';
+import { ToastService } from './toast-service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,10 +11,19 @@ export class Auth {
   private currentUser$ = new BehaviorSubject<User | null>(null);
   private currentSession$ = new BehaviorSubject<Session | null>(null);
 
-  constructor(private supabaseService: SupabaseService) {
+  constructor(
+    private supabaseService: SupabaseService,
+    private toast: ToastService
+  ) {
     this.supabaseService.onAuthStateChange((event, session) => {
+      if(event === 'SIGNED_OUT') {
+        this.currentSession$.next(null);
+        this.currentUser$.next(null);
+      }else if(event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
+        toast.default('Welcome back!')
       this.currentSession$.next(session);
       this.currentUser$.next(session?.user ?? null);
+      }
     });
 
     this.supabaseService.getSession().then(({ data: { session } }) => {

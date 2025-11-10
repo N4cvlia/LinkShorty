@@ -1,0 +1,104 @@
+:root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+    --border: 214.3 31.8% 91.4%;
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+    --ring: 222.2 84% 4.9%;
+  }
+  
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+    --border: 217.2 32.6% 17.5%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+    --ring: 212.7 26.8% 83.9%;
+  }
+  
+  /* Animation keyframes */
+  @keyframes in {
+    0% {
+      transform: translateY(100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes out {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  
+  @keyframes slideInFromTop {
+    0% {
+      transform: translateY(-100%);
+      opacity: 0;
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes slideOutToRight {
+    0% {
+      transform: translateX(0);
+      opacity: 1;
+    }
+    100% {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+  }
+  
+  /* Animation classes */
+  .animate-in {
+    animation: in 0.3s ease-out;
+  }
+  
+  .animate-out {
+    animation: out 0.2s ease-in;
+  }
+  
+  .data-[state=open]:animate-in[data-state="open"] {
+    animation: in 0.3s ease-out;
+  }
+  
+  .data-[state=closed]:animate-out[data-state="closed"] {
+    animation: out 0.2s ease-in;
+  }
+  
+  .slide-in-from-top-full {
+    animation: slideInFromTop 0.3s ease-out;
+  }
+  
+  .slide-out-to-right-full {
+    animation: slideOutToRight 0.2s ease-in;
+  }
+  
+  .fade-out-80 {
+    opacity: 0.8;
+  }
+  
+  /* Simple animations that work without data attributes */
+  .toast-enter {
+    animation: in 0.3s ease-out;
+  }
+  
+  .toast-exit {
+    animation: out 0.2s ease-in;
+  }

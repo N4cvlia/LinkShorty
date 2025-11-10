@@ -40,7 +40,9 @@ export class Stats implements OnInit{
     private supabaseService: SupabaseService,
     private router: Router,
     private exportService: ExportService
-  ){}
+  ){
+    window.scrollTo(0,0);
+  }
 
   async ngOnInit(){
     const resolvedData: StatsResolveData = this.route.snapshot.data['statsData'];

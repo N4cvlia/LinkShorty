@@ -67,9 +67,24 @@ export class SupabaseService {
   }
 
   async signOut() {
-    const { error } = await this.supabase.auth.signOut();
-    return { error };
-  }
+    try {
+      const { error } = await this.supabase.auth.signOut({
+        scope: 'local'
+      });
+  
+      if (error && !error.message?.includes('session_not_found')) {
+        console.error('Error signing out:', error);
+        return { error };
+      }
+  
+      return { error: null };
+    }catch (err) {
+      console.error('Unexpected error during sign out:', err);
+      return { error: null };
+    } finally {
+      localStorage.removeItem('sb-gnuyfalawunhjgublxsu-auth-token')
+    }
+  } 
 
   async getSession() {
     return await this.supabase.auth.getSession();

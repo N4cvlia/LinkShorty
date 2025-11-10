@@ -3,6 +3,7 @@ import { SupabaseService } from '../../../Services/supabase';
 import { FormsModule } from '@angular/forms';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { Router } from '@angular/router';
+import { ToastService } from '../../../Services/toast-service';
 
 @Component({
   selector: 'app-home',
@@ -22,8 +23,11 @@ export class Home {
 
   constructor(
     private supabaseService: SupabaseService,
-    private router: Router
-  ) {}
+    private router: Router,
+    private toast: ToastService
+  ) {
+    window.scrollTo(0,0);
+  }
 
   ngOnInit() {
     const lastShortened = this.getLastShortened();
@@ -68,6 +72,7 @@ export class Home {
       await 
       navigator.clipboard.writeText(this.result.shortUrl);
       this.copied = true;
+      this.toast.default("Link copied to clipboard!");
       setTimeout(() => {
         this.copied = false;
       }, 2000);

@@ -19,7 +19,9 @@ export class Login {
   constructor(
     private authService: Auth,
     private router: Router
-  ){}
+  ){
+    window.scrollTo(0,0);
+  }
 
   async onSubmit() {
     if(!this.email.trim() || !this.email.includes('@')){

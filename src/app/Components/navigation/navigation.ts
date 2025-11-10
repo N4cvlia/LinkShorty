@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs';
 import { Auth } from '../../Services/auth';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { ToastService } from '../../Services/toast-service';
 
 @Component({
   selector: 'app-navigation',
@@ -26,12 +27,13 @@ export class Navigation implements OnInit, OnDestroy{
   }
   @HostListener('window:scroll', [])
   onWindowScroll() {
-    this.isScrolled = window.scrollY > 30;
+    this.isScrolled = window.scrollY > 55;
   }
 
   constructor(
     private authService: Auth,
-    private router: Router
+    private router: Router,
+    private toast: ToastService
   ) { }
 
   ngOnInit(){
@@ -46,7 +48,9 @@ export class Navigation implements OnInit, OnDestroy{
   async logout() {
     const { error } = await this.authService.signOut();
 
+    
     if(!error) {
+      this.toast.default('Signed out successfully');
       this.router.navigate(['/']);
     }
   }

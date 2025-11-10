@@ -17,7 +17,9 @@ export class Redirect implements OnInit{
     private route: ActivatedRoute,
     private router: Router,
     private supabaseService: SupabaseService
-  ) {}
+  ) {
+    window.scrollTo(0,0);
+  }
 
   async ngOnInit() {
     const shortCode = this.route.snapshot.paramMap.get('shortCode');

@@ -3,6 +3,7 @@ import { UrlData } from '../../../Interfaces/url-data';
 import { Router } from '@angular/router';
 import { SupabaseService } from '../../../Services/supabase';
 import { formatDistanceToNow } from 'date-fns';
+import { ToastService } from '../../../Services/toast-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -17,8 +18,11 @@ export class Dashboard implements OnInit{
 
   constructor(
     private router: Router,
-    private supabaseService: SupabaseService
-  ) {}
+    private supabaseService: SupabaseService,
+    private toast: ToastService
+  ) {
+    window.scrollTo(0,0);
+  }
 
   async ngOnInit(){
     await this.checkAuthAndFetchUrls();
@@ -50,7 +54,7 @@ export class Dashboard implements OnInit{
   copyToClipboard(shortCode: string) {
     const url = `${window.location.origin}/${shortCode}`;
     navigator.clipboard.writeText(url);
-    alert(`Copied to clipboard!`);
+    this.toast.default('Link copied to clipboard!');
   }
 
   viewStats(token: string) {

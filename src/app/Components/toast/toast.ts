@@ -24,7 +24,7 @@ export class ToastComponent {
       case 'success':
         return `${baseClass} bg-green-600 text-white border-green-700`;
       case 'destructive':
-        return `${baseClass} bg-destructive text-destructive-foreground border-destructive`;
+        return `${baseClass} bg-white text-foreground border-gray-300`;
       default:
         return `${baseClass} bg-white text-foreground border-gray-300`;
     }

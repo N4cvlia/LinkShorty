@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { SupabaseService } from '../../../Services/supabase';
 import { formatDistanceToNow } from 'date-fns';
 import { ToastService } from '../../../Services/toast-service';
+import { SeoService } from '../../../Services/seo-service';
 
 @Component({
   selector: 'app-dashboard',
@@ -19,13 +20,21 @@ export class Dashboard implements OnInit{
   constructor(
     private router: Router,
     private supabaseService: SupabaseService,
-    private toast: ToastService
+    private toast: ToastService,
+    private seoService: SeoService
   ) {
     window.scrollTo(0,0);
   }
 
   async ngOnInit(){
     await this.checkAuthAndFetchUrls();
+
+    this.seoService.updateMetaTags({
+      title: 'My Links Dashboard - LinkShorty',
+      description: 'Manage all your shortened URLs in one place. View analytics, edit links, and track performance.',
+      keywords: 'link dashboard, url management, link analytics dashboard',
+      type: 'website'
+    });
   }
 
   async checkAuthAndFetchUrls(){

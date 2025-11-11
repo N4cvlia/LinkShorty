@@ -20,9 +20,9 @@ export class Auth {
         this.currentSession$.next(null);
         this.currentUser$.next(null);
       }else if(event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') {
-        toast.default('Welcome back!')
-      this.currentSession$.next(session);
-      this.currentUser$.next(session?.user ?? null);
+        toast.default('Welcome back!');
+        this.currentSession$.next(session);
+        this.currentUser$.next(session?.user ?? null);
       }
     });
 

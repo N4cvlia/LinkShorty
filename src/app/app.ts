@@ -5,6 +5,7 @@ import { RouterOutlet } from '@angular/router';
 import { Navigation } from "./Components/navigation/navigation";
 import { NgChartsConfiguration } from 'ng2-charts';
 import { ToastComponent } from "./Components/toast/toast";
+import { SeoService } from './Services/seo-service';
 
 @Component({
   selector: 'app-root',
@@ -12,7 +13,7 @@ import { ToastComponent } from "./Components/toast/toast";
     FormsModule,
     RouterOutlet,
     Navigation,
-    ToastComponent
+    ToastComponent,
 ],
   templateUrl: './app.html',
   styleUrl: './app.css'

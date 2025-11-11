@@ -8,6 +8,7 @@ import { ClickData } from '../Interfaces/click-data';
 import { ChartDataPoint } from '../Interfaces/chart-data-point';
 import { eachDayOfInterval, format, parseISO, startOfDay, subDays } from 'date-fns';
 import { ca } from 'date-fns/locale';
+import { ToastService } from './toast-service';
 
 @Injectable({
   providedIn: 'root'
@@ -15,7 +16,9 @@ import { ca } from 'date-fns/locale';
 export class SupabaseService {
   private supabase: SupabaseClient;
 
-  constructor() {
+  constructor(
+    private toast: ToastService
+  ) {
     this.supabase = createClient(
       environment.supabase.url,
       environment.supabase.anonKey,
@@ -111,7 +114,12 @@ export class SupabaseService {
       }
     });
 
-    if(error) throw error;
+    if(error) {
+      this.toast.error("Failed to shorten URL");
+      throw error;
+    }
+    
+    this.toast.default("URL shortened successfully!");
     return data;
   }
 

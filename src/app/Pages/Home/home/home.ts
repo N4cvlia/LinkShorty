@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { QRCodeComponent } from 'angularx-qrcode';
 import { Router } from '@angular/router';
 import { ToastService } from '../../../Services/toast-service';
+import { SeoService } from '../../../Services/seo-service';
 
 @Component({
   selector: 'app-home',
@@ -24,7 +25,8 @@ export class Home {
   constructor(
     private supabaseService: SupabaseService,
     private router: Router,
-    private toast: ToastService
+    private toast: ToastService,
+    private seoService: SeoService
   ) {
     window.scrollTo(0,0);
   }
@@ -34,6 +36,28 @@ export class Home {
     if(lastShortened) {
       this.result = lastShortened;
     }
+
+    this.seoService.updateMetaTags({
+      title: 'LinkShorty - Free URL Shortener | Create Short Links Instantly',
+      description: 'Shorten your URLs instantly with LinkShorty. Fast, free, and no sign-up required. Transform long links into short, shareable URLs with advanced analytics.',
+      keywords: 'url shortener, link shortener, short url, free url shortener, link management, url analytics',
+      image: `background gia.png`,
+      type: 'website'
+    });
+
+    this.seoService.addStructuredData({
+      '@context': 'https://schema.org',
+      '@type': 'WebApplication',
+      name: 'LinkShorty',
+      description: 'Free URL shortening service with analytics',
+      url: window.location.origin,
+      applicationCategory: 'UtilityApplication',
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'USD'
+      }
+    })
   }
 
   saveLastShortened(shortCode: string, shortUrl: string, originalUrl: string, statsUrl: string) {
@@ -61,11 +85,11 @@ export class Home {
       this.saveLastShortened(this.result.shortCode, this.result.shortUrl, this.result.originalUrl, this.result.statsUrl);
     } catch(err: any) {
       this.error = err.message || 'Failed to shorten URL';
-      console.error('Error:', err);
     } finally {
       this.loading = false;
     }
   }
+
 
   async copyToClipboard() {
     if(this.result?.shortUrl) {

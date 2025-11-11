@@ -12,6 +12,7 @@ import { BaseChartDirective } from 'ng2-charts';
 import { ExportService } from '../../../Services/export';
 import { ExportData } from '../../../Interfaces/export-data';
 import { ExportButtonsComponent } from '../../../Components/export-buttons-component/export-buttons-component';
+import { SeoService } from '../../../Services/seo-service';
 
 @Component({
   selector: 'app-stats',
@@ -39,7 +40,8 @@ export class Stats implements OnInit{
     private route: ActivatedRoute,
     private supabaseService: SupabaseService,
     private router: Router,
-    private exportService: ExportService
+    private exportService: ExportService,
+    private seoService: SeoService
   ){
     window.scrollTo(0,0);
   }
@@ -58,6 +60,13 @@ export class Stats implements OnInit{
     if(this.stats) {
       await this.loadAdvancedStats();
     }
+
+    this.seoService.updateMetaTags({
+      title: `Link Statistics - LinkShorty URL Shortener`,
+      description: `View detailed analytics for your shortened URL including clicks, geographic data, device types, and more.`,
+      keywords: 'url statistics, link analytics, click tracking, url insights',
+      type: 'website'
+    })
   }
 
   ngOnDestroy() {
